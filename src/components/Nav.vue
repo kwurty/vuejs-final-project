@@ -2,7 +2,7 @@
 
     <nav class="navbar is-primary" id="nav">
       <router-link to="/" class="navbar-item">Stock Trader</router-link> 
-      <router-link to="/" class="navbar-item">Portfolio</router-link> 
+      <router-link to="/portfolio" class="navbar-item">Portfolio</router-link> 
       <router-link to="/stocks" class="navbar-item">Stocks</router-link>
       <div class="navbar-end">
       <router-link to="/" class="navbar-item">End Day</router-link>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Stocks from '../components/Stocks.vue'
+import Portfolio from '../components/Portfolio.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +24,11 @@ Vue.use(VueRouter)
     path: '/stocks',
     name: 'Stocks',
     component: Stocks
+  },
+  {
+    path: '/portfolio',
+    name: 'Portfolio',
+    component: Portfolio
   }
 ]
 
