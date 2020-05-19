@@ -6,7 +6,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     ownedStocks: [],
+    savedData: [],
+    savedOwnedStocks: [],
     availableFunds: 10000,
+    currentDay: 0,
     availableStocks: [
       {
         name: "AMD",
@@ -49,10 +52,50 @@ export default new Vuex.Store({
         price: 320
       }
     ]
-},
+  },
   mutations: {
+    purchaseStocks(state, payload) {
+      // check if the stock is already owned
+      let stockOwned = state.ownedStocks.find(stock => stock.symbol === payload.symbol);
+
+      //if owned, update the quantity using the index found above, otherwise push the
+      // new stock into the owned stock array
+      if ((state.availableFunds - (payload.quantity * payload.price)) < 0) {
+        alert('You do not have enough funds to perform this action!');
+        return;
+      }
+      if (stockOwned) {
+        let stockIndex = state.ownedStocks.indexOf(stockOwned);
+        state.ownedStocks[stockIndex].quantity += parseInt(payload.quantity);
+      } else {
+        state.ownedStocks.push({
+          name: payload.name,
+          symbol: payload.symbol,
+          quantity: parseInt(payload.quantity)
+        });
+      }
+      state.availableFunds -= (payload.quantity * payload.price);
+      payload.quantity = 0;
+    },
+    saveStockGame(state) {
+      state.savedOwnedStocks = [];
+      state.savedOwnedStocks = JSON.parse(JSON.stringify(state.ownedStocks));
+    },
+    loadStockGame(state) {
+      state.ownedStocks = [];
+      state.ownedStocks = JSON.parse(JSON.stringify(state.savedOwnedStocks));
+    }
   },
   actions: {
+    purchaseStocks(context, payload) {
+      context.commit('purchaseStocks', payload);
+    },
+    saveStockGame(context) {
+      context.commit('saveStockGame');
+    },
+    loadStockGame(context) {
+      context.commit('loadStockGame');
+    }
   },
   modules: {
   },
@@ -63,8 +106,12 @@ export default new Vuex.Store({
     listOwnedStocks(state) {
       return state.ownedStocks;
     },
-    listAvailableFunds(state){
-      return state.availableFunds;
+    listAvailableFunds(state) {
+      let moneyFormat = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+      return moneyFormat.format(state.availableFunds);
     }
   }
 })
