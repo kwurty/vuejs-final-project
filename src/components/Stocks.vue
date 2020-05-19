@@ -20,7 +20,9 @@
                     quantity: stock.quantity,
                     price: stock.price
                 }
-            )"
+            );
+                stock.quantity = 0;
+            "
             >Buy</a>
           </div>
         </div>

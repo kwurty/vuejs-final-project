@@ -84,6 +84,19 @@ export default new Vuex.Store({
     loadStockGame(state) {
       state.ownedStocks = [];
       state.ownedStocks = JSON.parse(JSON.stringify(state.savedOwnedStocks));
+    },
+    endDay(state) {
+      // bump up the current day
+      state.currentDay++;
+
+      // generate a random price change for each stock.
+      state.availableStocks.forEach(stock => {
+        let randomNumber = Math.floor(Math.random() * ((stock.price/10) - (stock.price / 100)) + (stock.price / 100));
+        let randomMultipler = Math.random() < 0.5 ? 1 : -1;
+        state.price =  state.price + (randomNumber * randomMultipler);
+      })
+
+      //
     }
   },
   actions: {
