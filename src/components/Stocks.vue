@@ -5,10 +5,17 @@
         <div class="card-header-title">{{stock.name}}</div>
       </div>
       <div class="card-content is-centered">
-        {{stock.symbol}} - ${{ stock.price }}
+        {{stock.symbol}} - ${{ stock.price.toFixed(2) }}
         <div class="field has-addons">
           <div class="control">
-            <input class="input" type="number" placeholder="0" v-model="stock.quantity" />
+            <input
+              class="input"
+              type="number"
+              placeholder="0"
+              v-model="stock.quantity"
+              min="0"
+              default="undefined"
+            />
           </div>
           <div class="control">
             <a
@@ -21,7 +28,7 @@
                     price: stock.price
                 }
             );
-                stock.quantity = 0;
+                stock.quantity = undefined;
             "
             >Buy</a>
           </div>

@@ -6,7 +6,7 @@
       <router-link to="/stocks" class="navbar-item">Stocks</router-link>
     </div>
     <div class="navbar-end">
-      <router-link to="/" class="navbar-item">End Day</router-link>
+      <a class="navbar-item" @click="endDay()">End Day</a>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Save & Load</a>
         <div class="navbar-dropdown">
@@ -15,6 +15,7 @@
         </div>
       </div>
       <div class="navbar-item">Funds: {{ fundsAvailable }}</div>
+      <div class="navbar-item">Day: {{ currentDay }}</div>
     </div>
   </nav>
 </template>
@@ -25,10 +26,13 @@ export default {
   computed: {
     fundsAvailable() {
       return this.$store.getters.listAvailableFunds;
+    },
+    currentDay() {
+      return this.$store.getters.getCurrentDay;
     }
   },
   methods: {
-    ...mapActions(["loadStockGame", "saveStockGame"])
+    ...mapActions(["loadStockGame", "saveStockGame", "endDay"])
   }
 };
 </script>

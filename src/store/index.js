@@ -9,7 +9,8 @@ export default new Vuex.Store({
     savedData: [],
     savedOwnedStocks: [],
     availableFunds: 10000,
-    currentDay: 0,
+    currentDay: 1,
+    previousDayStocks: [],
     availableStocks: [
       {
         name: "AMD",
@@ -55,6 +56,12 @@ export default new Vuex.Store({
   },
   mutations: {
     purchaseStocks(state, payload) {
+      // if purchase amount is < 1, reject
+      if (isNaN(payload.quantity) || payload.quantity < 1) {
+        alert('You must purchase at least 1 stock');
+        return;
+      }
+
       // check if the stock is already owned
       let stockOwned = state.ownedStocks.find(stock => stock.symbol === payload.symbol);
 
@@ -78,36 +85,74 @@ export default new Vuex.Store({
       payload.quantity = 0;
     },
     saveStockGame(state) {
-      state.savedOwnedStocks = [];
       state.savedOwnedStocks = JSON.parse(JSON.stringify(state.ownedStocks));
     },
     loadStockGame(state) {
-      state.ownedStocks = [];
       state.ownedStocks = JSON.parse(JSON.stringify(state.savedOwnedStocks));
     },
     endDay(state) {
       // bump up the current day
       state.currentDay++;
 
+      state.previousDayStocks = JSON.parse(JSON.stringify(state.availableStocks));
+
       // generate a random price change for each stock.
       state.availableStocks.forEach(stock => {
-        let randomNumber = Math.floor(Math.random() * ((stock.price/10) - (stock.price / 100)) + (stock.price / 100));
+        let randomNumber = (Math.random() * ((stock.price / 10) - (stock.price / 100)) + (stock.price / 100));
         let randomMultipler = Math.random() < 0.5 ? 1 : -1;
-        state.price =  state.price + (randomNumber * randomMultipler);
+        stock.price += (randomNumber * randomMultipler);
       })
 
       //
+    },
+    sellStocks(state, payload) {
+      if (isNaN(payload.quantity) || payload.quantity < 1) {
+        alert('You must sell at least 1 stock');
+        return;
+      }
+
+
+      // find the stock in the list of available stocks to get the current price
+      let findAvailableStock = state.availableStocks.find(stock => stock.symbol === payload.symbol);
+      let availableStockInfo = state.availableStocks.indexOf(findAvailableStock);
+
+      //adjust the current user stocks
+      let stockOwned = state.ownedStocks.find(stock => stock.symbol === payload.symbol);
+      let stockIndex = state.ownedStocks.indexOf(stockOwned);
+
+      // check for cheaters
+      if ((state.ownedStocks[stockIndex].quantity - (payload.quantity)) < 0) {
+        alert('You cannot sell more stocks than you own!');
+        return;
+      }
+
+      // state.ownedStocks[stockIndex].quantity -= 2;
+      state.ownedStocks[stockIndex].quantity -= parseInt(payload.quantity);
+
+      //adjust current funds
+
+      state.availableFunds += (parseInt(state.availableStocks[availableStockInfo].price) * parseInt(payload.quantity));
+
+      if (state.ownedStocks[stockIndex].quantity === 0) {
+        state.ownedStocks.splice(stockIndex, 1);
+      }
     }
   },
   actions: {
     purchaseStocks(context, payload) {
       context.commit('purchaseStocks', payload);
     },
+    sellStocks(context, payload) {
+      context.commit('sellStocks', payload);
+    },
     saveStockGame(context) {
       context.commit('saveStockGame');
     },
     loadStockGame(context) {
       context.commit('loadStockGame');
+    },
+    endDay(context) {
+      context.commit('endDay');
     }
   },
   modules: {
@@ -125,6 +170,9 @@ export default new Vuex.Store({
         currency: "USD"
       });
       return moneyFormat.format(state.availableFunds);
+    },
+    getCurrentDay(state) {
+      return state.currentDay;
     }
   }
 })
