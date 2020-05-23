@@ -6,7 +6,8 @@
       <router-link to="/stocks" class="navbar-item">Stocks</router-link>
     </div>
     <div class="navbar-end">
-      <router-link to="/" class="navbar-item">End Day</router-link>
+      <a class="navbar-item" @click="endDay()">End Day</a>
+      <div class="navbar-item">Day: {{ currentDay }}</div>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Save & Load</a>
         <div class="navbar-dropdown">
@@ -20,15 +21,22 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import {mapGetters, mapActions} from 'vuex'
 export default {
   computed: {
-    fundsAvailable() {
-      return this.$store.getters.listAvailableFunds;
-    }
+
+    ...mapGetters({
+      currentDay: 'DayManagement/getCurrentDay',
+      fundsAvailable: 'UserPortfolio/listAvailableFunds'
+    })
   },
   methods: {
-    ...mapActions(["loadStockGame", "saveStockGame"])
+
+    ...mapActions({
+      loadStockGame: 'SaveState/loadStockGame',
+      saveStockGame: 'SaveState/saveStockGame',
+      endDay: 'DayManagement/endDay'
+    })
   }
 };
 </script>

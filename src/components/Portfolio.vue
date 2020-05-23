@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="title" v-if="listOwnedStocks.length < 1">Portfolio Empty! Go make some purchases.</div>
-    <div class="card is-one-quarter" v-for="stock in listOwnedStocks" :key="stock.symbol">
+    <div class="card is-one-quarter" v-for="(stock,index) in listOwnedStocks" :key="stock.symbol">
       <div class="card-header">
         <div class="card-header-title">{{stock.name}}</div>
       </div>
@@ -9,10 +9,17 @@
         {{stock.symbol}} - {{stock.quantity}}
         <div class="field has-addons">
           <div class="control">
-            <input class="input" type="number" placeholder="0" />
+            <input class="input" type="number" placeholder="0" v-model="quantity[index]" />
           </div>
           <div class="control">
-            <a class="button is-danger">Sell</a>
+            <a class="button is-danger" @click="sellStocks(
+                {
+                    symbol: stock.symbol,
+                    quantity: quantity[index]
+                }
+            );
+            quantity[index] = 0;
+            ">Sell</a>
           </div>
         </div>
       </div>
@@ -21,13 +28,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      quantity: []
+    };
   },
   computed: {
-    ...mapGetters(["listOwnedStocks", "listOwnedStocks"])
+    ...mapGetters(
+{        listOwnedStocks: 'UserPortfolio/listOwnedStocks',
+}        
+      )
+  },
+  methods: {
+    ...mapActions(
+      {
+        sellStocks: 'UserPortfolio/sellStocks'
+      }
+    )
   }
 };
 </script>

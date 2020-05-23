@@ -5,7 +5,7 @@
         <div class="card-header-title">{{stock.name}}</div>
       </div>
       <div class="card-content is-centered">
-        {{stock.symbol}} - ${{ stock.price }}
+        {{stock.symbol}} - ${{ stock.price.toFixed(2) }}
         <div class="field has-addons">
           <div class="control">
             <input class="input" type="number" placeholder="0" v-model="stock.quantity" />
@@ -39,12 +39,17 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["listAvailableStocks"])
+    ...mapGetters(
+      {
+        listAvailableStocks: 'AvailableStocks/listAvailableStocks'
+      })
   },
   methods: {
-    ...mapActions(["purchaseStocks"])
+    ...mapActions({
+      purchaseStocks: 'UserPortfolio/purchaseStocks'
+  })
   }
-};
+}
 </script>
 
 <style scoped>
