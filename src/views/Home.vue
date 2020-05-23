@@ -1,8 +1,9 @@
 <template>
   <div class="home">
-    <h1 class="title is-1">Trade or View your Portfolio</h1>
-    <p>You may Save & Load your Data</p>
-    <p>Click on 'End Day' to begin a new day!</p>
+    <h1 class="title is-1">Stock Trading</h1>
+    <p>Head over to the Stocks Tab to buy some Stocks</p>
+    <p>Manage your purchased stocks in the Portfolio tab</p>
+    <p>Prices will change each day - click on the End Day to finish your day</p>
     <hr />
     <h2 class="title is-3">Your Funds: {{ listAvailableFunds }}</h2>
   </div>
@@ -18,7 +19,10 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["listAvailableFunds"])
+    ...mapGetters(
+      {
+        listAvailableFunds: 'UserPortfolio/listAvailableFunds'
+      })
   }
 };
 </script>
