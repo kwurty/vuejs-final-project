@@ -51,8 +51,24 @@ const getters = {
       }
 }
 
+// generate a random price change for each stock.
+const mutations = {
+  setPrice(state) {
+    state.availableStocks.forEach(stock => {
+      let randomNumber = Math.random() * ((stock.price/10) - (stock.price / 100)) + (stock.price / 100);
+      let randomMultipler = Math.random() < 0.5 ? 1 : -1;
+      stock.price =  stock.price + (randomNumber * randomMultipler);
+    })
+  },
+
+  setStocks(state, payload){
+    state.availableStocks = payload;
+  }
+}
+
 export default {
     namespaced,
     state,
+    mutations,
     getters
 }

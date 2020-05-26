@@ -17,13 +17,6 @@ const mutations = {
 
     state.savedData = JSON.parse(JSON.stringify(tempState));
 
-  },
-  loadStockGame(state) {
-    let tempState = JSON.parse(JSON.stringify(state));
-    this.state.DayManagement.currentday = tempState.savedData.currentDay;
-    this.state.UserPortfolio.ownedStocks = tempState.savedData.ownedStocks;
-    this.state.AvailableStocks.availableStocks = tempState.savedData.availableStocks;
-    this.state.UserPortfolio.fundsAvailable = tempState.savedData.fundsAvailable;
   }
 }
 
@@ -38,7 +31,10 @@ const actions = {
     });
   },
   loadStockGame(context) {
-    context.commit('loadStockGame');
+    context.commit('UserPortfolio/setFunds', state.savedData.fundsAvailable, { root : true });
+    context.commit('UserPortfolio/setStocks', state.savedData.ownedStocks, { root: true });
+    context.commit('AvailableStocks/setStocks', state.savedData.availableStocks, {root: true});
+    context.commit('DayManagement/setDay', state.savedData.currentDay - 1, {root : true});
   }
 }
 

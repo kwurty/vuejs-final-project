@@ -64,7 +64,15 @@ export default {
       }
 
       console.log(`Selling ${payload} at ${payload.availableStocks[availableStockInfo].price}`)
-    }
+    },
+
+  setFunds(state, payload){ 
+    state.availableFunds = payload;
+  },
+
+  setStocks(state, payload) {
+    state.ownedStocks = payload;
+  }
   },
 
   actions: {

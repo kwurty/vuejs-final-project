@@ -4,19 +4,13 @@ const state = {
     currentDay: 0
 }
 const mutations = {
-    endDay(state, payload) {
+    endDay(state) {
         // bump up the current day
         state.currentDay++;
-  
-        // generate a random price change for each stock.
-        payload.availableStocks.forEach(stock => {
-          let randomNumber = Math.random() * ((stock.price/10) - (stock.price / 100)) + (stock.price / 100);
-          let randomMultipler = Math.random() < 0.5 ? 1 : -1;
-          stock.price =  stock.price + (randomNumber * randomMultipler);
-        })
-  
-        //
-      }
+      },
+    setDay(state, payload){
+        state.currentDay = payload;
+    }
 }
 
 const getters =  {
@@ -28,6 +22,9 @@ const getters =  {
 const actions =  {
     endDay(context) {
         context.commit('endDay', {availableStocks: context.rootGetters['AvailableStocks/listAvailableStocks']});
+          
+        // call mutation to adjust prices. Mutation is in the AvailableStocks module
+        context.commit('AvailableStocks/setPrice', null, { root: true })
     }
 }
 
