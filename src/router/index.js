@@ -21,6 +21,11 @@ const routes = [
     path: '/portfolio',
     name: 'Portfolio',
     component: Portfolio
+  },
+  {
+    path: '*',
+    name: 'Catchall',
+    component: Home
   }
 ]
 
