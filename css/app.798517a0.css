@@ -1,0 +1,1 @@
+.slide-fade-enter-active{transition:all .3s ease}.slide-fade-leave-active{transition:all .4s cubic-bezier(1,.5,.8,1)}.slide-fade-enter,.slide-fade-leave-to{transform:translateX(10px);opacity:0}.container[data-v-73c4e25a]{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,2fr));grid-gap:.5em}input[data-v-73c4e25a]{justify-content:center}
